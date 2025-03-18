@@ -1,14 +1,21 @@
-# Build React app
 FROM node:18-alpine AS build
 
 WORKDIR /app
 COPY frontend/package.json frontend/package-lock.json ./
+
+# Install dependencies
 RUN npm install
+
 COPY frontend/ . 
+
+# Set OpenSSL legacy provider (fix for Webpack issues)
+ENV NODE_OPTIONS="--openssl-legacy-provider"
+
+# Build the React app
 RUN npm run build
 
-# Serve with Nginx
-FROM nginx:alpine
-COPY --from=build /app/build /usr/share/nginx/html
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+# Use a lightweight server to serve the static build
+RUN npm install -g serve
+EXPOSE 3000 
+
+CMD ["serve", "-s", "build", "-l", "3000"]

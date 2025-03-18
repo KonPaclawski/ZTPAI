@@ -7,8 +7,14 @@ WORKDIR /app
 COPY backend/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy project files
+# Copy backend project files
 COPY backend/ .
+
+# Create staticfiles directory (to avoid collectstatic errors)
+RUN mkdir -p /app/staticfiles
+
+# Collect static files
+RUN python manage.py collectstatic --noinput
 
 # Expose port and run Django server
 EXPOSE 8000
