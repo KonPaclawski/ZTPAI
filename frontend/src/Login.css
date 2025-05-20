@@ -1,42 +1,42 @@
 body {
     background-color: #D1D1D1;
-    margin: 0; 
+    margin: 0;
     padding: 0;
     height: 100vh;
     overflow-x: hidden;
 }
 
-.register-header{
+.login-header {
     display: flex;
     justify-content: center;
     width: 40vw;
     height: 100vh;
     align-items: center;
-    position: fixed; 
+    position: fixed;
     left: 0;
     top: 0;
     flex-direction: column;
 }
 
-.register-container {
+.login-container {
     display: flex;
     justify-content: center;
     width: 60vw;
     height: 100vh;
     align-items: center;
     background-color: #4F6CCB;
-    position: fixed; 
+    position: fixed;
     right: 0;
     top: 0;
     flex-direction: column;
 }
 
-form{
+form {
     display: flex;
     flex-direction: column;
 }
 
-input{
+input {
     margin: 10px 0;
     padding: 10px;
     border-radius: 5px;
@@ -44,7 +44,7 @@ input{
     font-size: 16px;
 }
 
-button{
+button {
     margin: 10px 0;
     padding: 10px;
     border-radius: 5px;
@@ -52,13 +52,13 @@ button{
     font-size: 16px;
     background-color: white;
     cursor: pointer;
-    width:50%;
+    width: 50%;
     color: black;
     font-weight: bold;
-    margin-left:25%;
+    margin-left: 25%;
 }
 
-a{
+a {
     text-decoration: underline;
     color: black;
     font-size: 16px;

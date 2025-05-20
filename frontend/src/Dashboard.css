@@ -1,0 +1,36 @@
+body {
+    background-color: #D1D1D1;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    overflow-x: hidden;
+}
+
+.sidebar {
+    width: 250px;
+    height: 100%;
+    background-color: #4F6CCB;
+    position: fixed;
+    display:flex;
+    flex-direction: column;
+    padding-top: 70vh;
+    align-items: center;
+    gap:2vh;
+
+}
+
+.sidebar h2 {
+    color: white;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+.sidebar a:hover {
+    background-color: #3E5BBF;
+}
+.sidebar a {
+    color: white;
+    text-decoration: none;
+    display: block;
+    width: 100%;
+    text-align: center;
+}
