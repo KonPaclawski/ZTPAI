@@ -1,50 +1,58 @@
-import json
-from django.http import JsonResponse
-from django.views import View
-from django.views.decorators.csrf import csrf_exempt
-from django.utils.decorators import method_decorator
-from .models import User  
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework import status
+from django.contrib.auth.hashers import make_password
+from .models import User
+from rest_framework_simplejwt.tokens import RefreshToken
 
-@method_decorator(csrf_exempt, name="dispatch")
-class UserListView(View):
+class UserListView(APIView):
+    permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        users = list(User.objects.values("id", "name", "email"))  
-        return JsonResponse({"users": users}, status=200)
+        users = list(User.objects.values("id", "name", "email"))
+        return Response({"users": users}, status=status.HTTP_200_OK)
+
+
+class RegisterUserView(APIView):
+    permission_classes = [AllowAny]  
 
     def post(self, request):
-        try:
-            data = json.loads(request.body)
-            if "name" not in data or "email" not in data or "password" not in data:
-                return JsonResponse({"error": "Missing field"}, status=400)
+        data = request.data
+    
+        if "name" not in data or "email" not in data or "password" not in data:
+            return Response({"error": "Missing field"}, status=status.HTTP_400_BAD_REQUEST)
 
-            new_user = User.objects.create(
-                name=data["name"],
-                email=data["email"],
-                password=data["password"] 
-            )
-            new_user.save(force_insert=True)
-            return JsonResponse(
-                {"message": "User registered successfully!", "user_id": new_user.id},
-                status=201
-            )
+        if User.objects.filter(email=data["email"]).exists():
+            return Response({"error": "Email already exists"}, status=status.HTTP_400_BAD_REQUEST)
+        if(data["email"] == "admin@admin.com"):
+            role_for = "admin"
+        else:
+            role_for = "user"
+            
+        new_user = User(
+            name=data["name"],
+            email=data["email"],
+            password=make_password(data["password"]),
+            role=role_for
+        )
+        new_user.save()
+        print("Użytkownik zapisany:", new_user.email)
+        refresh = RefreshToken.for_user(new_user)
+        return Response({
+            "message": "User registered successfully!",
+            "user_id": new_user.id,
+            "access": str(refresh.access_token),
+            "refresh": str(refresh),
+        }, status=status.HTTP_201_CREATED)
 
-        except json.JSONDecodeError:
-            return JsonResponse({"error": "Invalid JSON"}, status=400)
-
-
-@method_decorator(csrf_exempt, name="dispatch")
-class UserDetailView(View):
-
-    def get_user(self, user_id):
-        try:
-            return User.objects.get(id=user_id)
-        except User.DoesNotExist:
-            return None
+class UserDetailView(APIView):
+    permission_classes = [IsAuthenticated]
 
     def get(self, request, user_id):
-        user = self.get_user(user_id)
-        if not user:
-            return JsonResponse({"error": "User not found"}, status=404)
+        try:
+            user = User.objects.get(id=user_id)
+        except User.DoesNotExist:
+            return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
 
-        return JsonResponse({"id": user.id, "name": user.name, "email": user.email}, status=200)
+        return Response({"id": user.id, "name": user.name, "email": user.email}, status=status.HTTP_200_OK)

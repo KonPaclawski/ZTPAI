@@ -8,3 +8,7 @@ celery
 redis  
 dj-database-url
 dotenv
+djangorestframework-simplejwt
+django-allauth    
+dj-rest-auth  
+django-debug-toolbar      

@@ -1,81 +1,38 @@
-import json
-from django.http import JsonResponse
-from django.views import View
-from django.views.decorators.csrf import csrf_exempt
-from django.utils.decorators import method_decorator
-from .models import Budget  
-from .models import User
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
+from rest_framework import status
+from .models import Budget 
 
-@method_decorator(csrf_exempt, name='dispatch')
-class BudgetListView(View):
+class BudgetListView(APIView):
+    permission_classes = [IsAuthenticated]
+
     def get(self, request):
-        budgets = list(Budget.objects.values())  
-        return JsonResponse({"budgets": budgets}, status=200)
+        budgets = Budget.objects.filter(user=request.user).values()
+        return Response({"budgets": list(budgets)}, status=status.HTTP_200_OK)
 
     def post(self, request):
-        try:
-            data = json.loads(request.body)
-            required_fields = ["title", "category", "payment_title", "amount", "user_id"]
-            if not all(field in data for field in required_fields):
-                return JsonResponse({"error": "Missing fields"}, status=400)
+        data = request.data
+        required_fields = ["title", "category", "payment_title", "amount"]
+        if not all(field in data for field in required_fields):
+            return Response({"error": "Missing fields"}, status=status.HTTP_400_BAD_REQUEST)
 
-            # Używamy `user_id` do odnalezienia użytkownika
-            user = User.objects.get(id=data["user_id"])
-            
-            new_budget = Budget.objects.create(
-                title=data["title"],
-                category=data["category"],
-                payment_title=data["payment_title"],
-                amount=data["amount"],
-                user=user  # Używamy obiektu `user`
-            )
+        budget = Budget.objects.create(
+            title=data["title"],
+            category=data["category"],
+            payment_title=data["payment_title"],
+            amount=data["amount"],
+            user=request.user 
+        )
 
-            return JsonResponse({"message": "Budget created", "budget": {
-                "id": new_budget.id,
-                "title": new_budget.title,
-                "category": new_budget.category,
-                "payment_title": new_budget.payment_title,
-                "amount": new_budget.amount,
-                "user_id": new_budget.user.id  # Zwracamy `user_id`, nie `user`
-            }}, status=201)
-        except json.JSONDecodeError:
-            return JsonResponse({"error": "Invalid JSON"}, status=400)
-        except User.DoesNotExist:
-            return JsonResponse({"error": "User not found"}, status=404)
-
-@method_decorator(csrf_exempt, name='dispatch')
-class UserBudgetListView(View):
-    def get(self, request, user_id):
-        budgets = list(Budget.objects.filter(user_id=user_id).values())
-        return JsonResponse({"budgets": budgets}, status=200)
-
-    def post(self, request, user_id):
-        try:
-            data = json.loads(request.body)
-            required_fields = ["title", "category", "payment_title", "amount"]
-            if not all(field in data for field in required_fields):
-                return JsonResponse({"error": "Missing fields"}, status=400)
-
-            # Sprawdzamy, czy użytkownik istnieje
-            user = User.objects.get(id=user_id)
-
-            new_budget = Budget.objects.create(
-                title=data["title"],
-                category=data["category"],
-                payment_title=data["payment_title"],
-                amount=data["amount"],
-                user=user  # Używamy obiektu `user`
-            )
-
-            return JsonResponse({"message": "Budget created", "budget": {
-                "id": new_budget.id,
-                "title": new_budget.title,
-                "category": new_budget.category,
-                "payment_title": new_budget.payment_title,
-                "amount": new_budget.amount,
-                "user_id": new_budget.user.id  # Zwracamy `user_id`, nie `user`
-            }}, status=201)
-        except json.JSONDecodeError:
-            return JsonResponse({"error": "Invalid JSON"}, status=400)
-        except User.DoesNotExist:
-            return JsonResponse({"error": "User not found"}, status=404)
+        return Response({
+            "message": "Budget created",
+            "budget": {
+                "id": budget.id,
+                "title": budget.title,
+                "category": budget.category,
+                "payment_title": budget.payment_title,
+                "amount": budget.amount,
+                "user_id": budget.user.id
+            }
+        }, status=status.HTTP_201_CREATED)
