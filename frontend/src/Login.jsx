@@ -20,7 +20,6 @@ const Login = () => {
 
       const { access, refresh, user } = response.data;
 
-      // Zapis tokenów i danych użytkownika w localStorage
       localStorage.setItem("accessToken", access);
       localStorage.setItem("refreshToken", refresh);
       localStorage.setItem("userId", user.id);

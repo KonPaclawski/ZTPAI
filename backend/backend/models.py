@@ -5,6 +5,7 @@ class User(models.Model):
     name = models.CharField(max_length=255)
     email = models.EmailField(unique=True)
     password = models.CharField(max_length=255) 
+    role = models.CharField(max_length=255, default="user")
 
 class Budget(models.Model):
     id = models.AutoField(primary_key=True)

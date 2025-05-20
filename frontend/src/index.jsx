@@ -5,6 +5,7 @@ import App from "./App";
 import Register from "./Register";
 import Login from "./Login";
 import Dashboard from "./Dashboard";
+import Settings from "./Settings";
 
 const rootElement = document.getElementById("root");
 const root = ReactDOM.createRoot(rootElement); 
@@ -17,7 +18,7 @@ root.render(
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/dashboard" element={<Dashboard />} />
-        
+        <Route path="/settings" element={<Settings />} />
       </Routes>
     </Router>
   </React.StrictMode>
