@@ -2,19 +2,25 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
+from rest_framework_simplejwt.authentication import JWTAuthentication
 from .models import Budget, Category, Payment
 
 class BudgetListView(APIView):
+    authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        budgets = Budget.objects.filter(user=request.user).prefetch_related('categories__payment_set')
+        print("DEBUG USER:", request.user)
+        print("DEBUG AUTH:", request.headers.get("Authorization"))
+
+        budgets = Budget.objects.filter(user=request.user).prefetch_related('categories__payments')
+
         data = []
         for budget in budgets:
-            categories = []
+            categories_data = []
             for category in budget.categories.all():
-                payments = list(category.payment_set.values("id", "payment_title", "amount", "date"))
-                categories.append({
+                payments = list(category.payments.values("id", "payment_title", "amount", "date"))
+                categories_data.append({
                     "id": category.id,
                     "name": category.name,
                     "payments": payments
@@ -23,10 +29,11 @@ class BudgetListView(APIView):
             data.append({
                 "id": budget.id,
                 "title": budget.title,
-                "categories": categories
+                "categories": categories_data
             })
 
         return Response({"budgets": data}, status=status.HTTP_200_OK)
+
 
     def post(self, request):
         data = request.data
@@ -36,6 +43,7 @@ class BudgetListView(APIView):
         if not title:
             return Response({"error": "Title is required"}, status=status.HTTP_400_BAD_REQUEST)
 
+        # Create budget linked to user
         budget = Budget.objects.create(title=title, user=request.user)
         created_categories = []
         created_payments = []
@@ -58,6 +66,8 @@ class BudgetListView(APIView):
 
                 payment = Payment.objects.create(
                     budget=budget,
+                    category=category,
+                    user=request.user,
                     payment_title=payment_title,
                     amount=amount,
                     date=date

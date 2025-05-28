@@ -4,10 +4,13 @@ body {
     padding: 0;
     height: 100vh;
     overflow-x: hidden;
+    font-family: Arial, sans-serif;
 }
 
+/* Sidebar styles */
 .sidebar {
     width: 20vw;
+    min-width: 200px;
     height: 100vh;
     background-color: #D1D1D1;
     position: fixed;
@@ -16,11 +19,18 @@ body {
     justify-content: space-between;
     padding: 20px 0;
     align-items: center;
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
 }
 
 .sidebar-header {
     text-align: center;
     width: 100%;
+}
+
+.sidebar h2 {
+    color: black;
+    font-size: 2.2rem;
+    margin-bottom: 20px;
 }
 
 .sidebar-links {
@@ -30,27 +40,60 @@ body {
     width: 100%;
     align-items: center;
 }
+
+.sidebar a {
+    color: black;
+    text-decoration: none;
+    width: 100%;
+    text-align: center;
+    font-size: 1.4rem;
+    padding: 10px 0;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.sidebar a:hover {
+    background-color: #3E5BBF;
+    color: white;
+    border-radius: 5px;
+    width: 80%;
+}
+
+/* Ensure last item has margin at bottom */
 .sidebar > *:last-child {
     margin-bottom: 5vh;
 }
 
-.sidebar h2 {
-    color: black;
-    font-size: 24px;
-    margin-bottom: 20px;
-    font-size:2.2rem;
+/* Main content styles */
+.main-content {
+    margin-left: 20vw;
+    padding: 40px;
+    color: white;
 }
-.sidebar a:hover {
+
+.budget-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.budget-button {
+    padding: 12px 20px;
     background-color: #3E5BBF;
-    width:50%;
-    border-radius: 5px;
-    color:white;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 1.1rem;
+    text-align: left;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
-.sidebar a {
-    color: black;
-    text-decoration: none;
-    display: block;
-    width: 100%;
-    font-size:1.4rem;
-    text-align: center;
+
+.budget-button:hover {
+    background-color: #324ca5;
+}
+
+.error {
+    color: red;
+    margin-top: 10px;
 }
