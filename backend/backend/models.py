@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
-from django.conf import settings  # <-- THIS is where you import it
+from django.conf import settings
+
 
 class UserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
@@ -22,7 +23,8 @@ class UserManager(BaseUserManager):
             raise ValueError("Superuser must have is_superuser=True.")
 
         return self.create_user(email, password, **extra_fields)
-    
+
+
 class User(AbstractBaseUser, PermissionsMixin):
     id = models.AutoField(primary_key=True)
     email = models.EmailField(unique=True)
@@ -39,14 +41,25 @@ class User(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.email
 
-class Budget(models.Model):
+
+class Category(models.Model):
     id = models.AutoField(primary_key=True)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)  # <-- HERE
-    title = models.CharField(max_length=255)
-    category = models.CharField(max_length=255)
+    name = models.CharField(max_length=255)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"{self.title} ({self.category})"
+        return self.name
+
+
+class Budget(models.Model):
+    id = models.AutoField(primary_key=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    title = models.CharField(max_length=255)
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.title} ({self.category.name if self.category else 'No Category'})"
+
 
 class Payment(models.Model):
     id = models.AutoField(primary_key=True)
@@ -57,3 +70,12 @@ class Payment(models.Model):
 
     def __str__(self):
         return f"{self.payment_title} - {self.amount}"
+
+
+class Note(models.Model):
+    id = models.AutoField(primary_key=True)
+    payment = models.OneToOneField(Payment, on_delete=models.CASCADE, related_name="note")
+    content = models.TextField(blank=True)
+
+    def __str__(self):
+        return f"Note for Payment ID {self.payment.id}"
