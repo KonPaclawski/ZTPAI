@@ -6,6 +6,7 @@ import Register from "./Register";
 import Login from "./Login";
 import Dashboard from "./Dashboard";
 import Settings from "./Settings";
+import NewBudget from "./newBudget";
 
 const rootElement = document.getElementById("root");
 const root = ReactDOM.createRoot(rootElement); 
@@ -18,6 +19,7 @@ root.render(
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/newBudget" element={<NewBudget />} />
         <Route path="/settings" element={<Settings />} />
       </Routes>
     </Router>

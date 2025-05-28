@@ -10,12 +10,14 @@ const Dashboard = () => {
 
   const fetchUsers = async () => {
     const accessToken = localStorage.getItem("accessToken");
+  console.log("accessToken from localStorage:", accessToken);
     try {
       const response = await axios.get("http://localhost:8000/api/users/", {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
       });
+      
       setUsers(response.data.users);
       setError(null);
     } catch (err) {
@@ -56,36 +58,35 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
+    const accessToken = localStorage.getItem("accessToken");
+    if (!accessToken) {
+      alert("No access token found, please login");
+      navigate("/login");
+      return;
+    }
     fetchUsers();
   }, []);
 
   return (
     <>
-      <div className="sidebar">
-        <h2>SmartFlow</h2>
-        <a href="/newBudget">Nowy Budżet</a>
-        <a href="/settings">Settings</a>
-        <a
-          href="#logout"
-          onClick={() => {
-            localStorage.clear();
-            navigate("/login");
-          }}
-        >
-          Logout
-        </a>
+      <div class="sidebar">
+        <div class="sidebar-header">
+          <h2>SmartFlow</h2>
+        </div>
+        <div class="sidebar-links">
+          <a href="/newBudget">Nowy Budżet</a>
+          <a href="/settings">Settings</a>
+          <a
+            href="#logout"
+            onClick={() => {
+              localStorage.clear();
+            }}
+          >
+            Logout
+          </a>
+        </div>
       </div>
-      <div className="main-content">
-        <h3>User List</h3>
-        {error && <p style={{ color: "red" }}>{error}</p>}
-        <ul>
-          {users.map((user) => (
-            <li key={user.id}>
-              {user.name} ({user.email})
-            </li>
-          ))}
-        </ul>
-      </div>
+
     </>
   );
 };

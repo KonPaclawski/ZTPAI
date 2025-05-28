@@ -11,27 +11,33 @@ const Login = () => {
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await axios.post("http://localhost:8000/api/login/", {
-        email,
-        password
-      });
+  e.preventDefault();
+  try {
+    const response = await axios.post("http://localhost:8000/api/login/", {
+      email,
+      password,
+    });
+    console.log("Login response:", response.data);
 
-      const { access, refresh, user } = response.data;
+    const { access, refresh, user } = response.data;
 
-      localStorage.setItem("accessToken", access);
-      localStorage.setItem("refreshToken", refresh);
-      localStorage.setItem("userId", user.id);
-      localStorage.setItem("userEmail", user.email);
+    localStorage.setItem("accessToken", access);
+    localStorage.setItem("refreshToken", refresh);
+    localStorage.setItem("userId", user.id);
+    localStorage.setItem("userEmail", user.email);
+    localStorage.setItem("userRole", user.role);
 
-      alert("Zalogowano pomyślnie!");
-      navigate("/dashboard");
-    } catch (error) {
-      console.error("Login error:", error.response?.data || error.message);
-      alert(`Login failed! ${error.response?.data?.error || "Unknown error"}`);
-    }
-  };
+    console.log("accessToken after login:", localStorage.getItem("accessToken"));
+    console.log("refreshToken after login:", localStorage.getItem("refreshToken"));
+
+    alert("Zalogowano pomyślnie!");
+    navigate("/dashboard");
+  } catch (error) {
+    console.error("Login error:", error.response?.data || error.message);
+    alert(`Login failed! ${error.response?.data?.error || "Unknown error"}`);
+  }
+};
+
 
   return (
     <>
