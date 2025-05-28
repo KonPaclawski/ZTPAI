@@ -18,12 +18,10 @@ class BudgetListView(APIView):
             return Response({"error": "Missing fields"}, status=status.HTTP_400_BAD_REQUEST)
 
         budget = Budget.objects.create(
-            title=data["title"],
-            category=data["category"],
-            payment_title=data["payment_title"],
-            amount=data["amount"],
-            user=request.user 
-        )
+        title=data["title"],
+        category=data["category"],
+        user=request.user)
+
 
         return Response({
             "message": "Budget created",
