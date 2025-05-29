@@ -6,7 +6,7 @@ from django.utils.decorators import method_decorator
 from django.contrib.auth.hashers import check_password
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenRefreshView
-from .models import User
+from ..models import User
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 

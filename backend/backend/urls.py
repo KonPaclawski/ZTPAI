@@ -3,10 +3,10 @@ from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 
-from .views import UserListView, UserDetailView, RegisterUserView, DeleteUserView
-from .budget_view import BudgetListView, BudgetDetailView
-from .login_view import LoginView, LogoutView, CustomTokenRefreshView
-from .note_view import NoteView
+from .views.views import UserListView, UserDetailView, RegisterUserView, DeleteUserView
+from .views.budget_view import BudgetListView, BudgetDetailView
+from .views.login_view import LoginView, LogoutView, CustomTokenRefreshView
+from .views.note_view import NoteView
 
 schema_view = get_schema_view(
    openapi.Info(

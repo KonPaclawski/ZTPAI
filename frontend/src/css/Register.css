@@ -1,24 +1,29 @@
 body {
-    margin: 0;
+    background-color: #D1D1D1;
+    margin: 0; 
     padding: 0;
     height: 100vh;
     overflow-x: hidden;
 }
 
-.login-header {
+.register-header{
     display: flex;
     justify-content: center;
     background-color: #D1D1D1;
     width: 40vw;
     height: 100vh;
     align-items: center;
-    position: fixed;
+    position: fixed; 
     left: 0;
     top: 0;
     flex-direction: column;
 }
 
-.login-container {
+.register-header > h1{
+    color:black;
+}
+
+.register-container {
     display: flex;
     justify-content: center;
     width: 60vw;
@@ -31,14 +36,14 @@ body {
     flex-direction: column;
 }
 
-.login-container > form {
+.register-container > form {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: center;;
 }
 
-.login-container > form > input {
+.register-container > form > input {
     margin: 10px 0;
     padding: 10px;
     border-radius: 5px;
@@ -46,7 +51,7 @@ body {
     font-size: 16px;
 }
 
-.login-container > form > button {
+.register-container > form > button {
     margin: 10px 0;
     padding: 10px;
     border-radius: 5px;
@@ -58,7 +63,7 @@ body {
     border: 2px solid black;
 }
 
-a {
+a{
     color: black;
     font-size: 16px;
 }

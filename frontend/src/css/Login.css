@@ -1,25 +1,27 @@
 body {
-    background-color: #D1D1D1;
-    margin: 0; 
+    margin: 0;
     padding: 0;
     height: 100vh;
     overflow-x: hidden;
 }
 
-.register-header{
+.login-header {
     display: flex;
     justify-content: center;
     background-color: #D1D1D1;
     width: 40vw;
     height: 100vh;
     align-items: center;
-    position: fixed; 
+    position: fixed;
     left: 0;
     top: 0;
     flex-direction: column;
 }
 
-.register-container {
+.login-header > h1{
+    color:black;
+}
+.login-container {
     display: flex;
     justify-content: center;
     width: 60vw;
@@ -32,14 +34,14 @@ body {
     flex-direction: column;
 }
 
-.register-container > form {
+.login-container > form {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;;
+    justify-content: center;
 }
 
-.register-container > form > input {
+.login-container > form > input {
     margin: 10px 0;
     padding: 10px;
     border-radius: 5px;
@@ -47,7 +49,7 @@ body {
     font-size: 16px;
 }
 
-.register-container > form > button {
+.login-container > form > button {
     margin: 10px 0;
     padding: 10px;
     border-radius: 5px;
@@ -59,7 +61,7 @@ body {
     border: 2px solid black;
 }
 
-a{
+a {
     color: black;
     font-size: 16px;
 }

@@ -3,7 +3,7 @@ from django.http import JsonResponse
 from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
-from .models import Note, Payment
+from ..models import Note, Payment
 from django.contrib.auth.decorators import login_required
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi

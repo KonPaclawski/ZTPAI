@@ -1,13 +1,13 @@
 import React from "react";
 import ReactDOM from "react-dom/client"; 
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import App from "./App";
-import Register from "./Register";
-import Login from "./Login";
-import Dashboard from "./Dashboard";
-import Settings from "./Settings";
-import NewBudget from "./newBudget";
-import Budget from "./Budget";
+import App from "./jsx/App";
+import Register from "./jsx/Register";
+import Login from "./jsx/Login";
+import Dashboard from "./jsx/Dashboard";
+import Settings from "./jsx/Settings";
+import NewBudget from "./jsx/newBudget";
+import Budget from "./jsx/Budget";
 
 const rootElement = document.getElementById("root");
 const root = ReactDOM.createRoot(rootElement); 

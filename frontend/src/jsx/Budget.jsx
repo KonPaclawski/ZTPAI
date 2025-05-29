@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
-import "./Budget.css";
+import "../css/Budget.css";
 
 const Budget = () => {
   const { id } = useParams();
