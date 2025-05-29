@@ -40,8 +40,8 @@ const Dashboard = () => {
         </div>
         <nav className="sidebar-links">
           <a href="/newBudget">Nowy Budżet</a>
-          <a href="/settings">Settings</a>
-          <a onClick={() => logout(navigate)}>Logout</a>
+          <a href="/settings">Ustawienia</a>
+          <a onClick={() => logout(navigate)}>Wyloguj</a>
         </nav>
       </aside>
 
