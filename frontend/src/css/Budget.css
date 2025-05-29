@@ -6,15 +6,14 @@ body {
 
 .budget-menu_left {
     width: 20vw;
-    height: auto;
     background-color: #3a58a4;
     display: flex;
     flex-direction: column;
     align-items: center;
     padding-top: 4rem;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+    justify-content: space-between; 
 }
-
 .budget-logo_left {
     width: 80%;
     text-align: center;
