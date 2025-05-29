@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./Dashboard.css";
 import { useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCreditCard } from '@fortawesome/free-solid-svg-icons';
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -62,6 +64,7 @@ const Dashboard = () => {
       <aside className="sidebar">
         <div className="sidebar-header">
           <h2>SmartFlow</h2>
+          <FontAwesomeIcon icon={faCreditCard} style={{ color: '#4f6ccb' }} size="5x" />
         </div>
         <nav className="sidebar-links">
           <a href="/newBudget">Nowy Budżet</a>
