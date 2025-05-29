@@ -7,9 +7,44 @@ from django.contrib.auth.hashers import check_password
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenRefreshView
 from .models import User
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
 
 @method_decorator(csrf_exempt, name="dispatch")
 class LoginView(View):
+    @swagger_auto_schema(
+        operation_description="Logowanie użytkownika",
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            required=['email', 'password'],
+            properties={
+                'email': openapi.Schema(type=openapi.TYPE_STRING, description='Email użytkownika'),
+                'password': openapi.Schema(type=openapi.TYPE_STRING, description='Hasło użytkownika'),
+            },
+        ),
+        responses={
+            200: openapi.Response(
+                description="Logowanie udane",
+                schema=openapi.Schema(
+                    type=openapi.TYPE_OBJECT,
+                    properties={
+                        'message': openapi.Schema(type=openapi.TYPE_STRING),
+                        'user': openapi.Schema(
+                            type=openapi.TYPE_OBJECT,
+                            properties={
+                                'id': openapi.Schema(type=openapi.TYPE_INTEGER),
+                                'email': openapi.Schema(type=openapi.TYPE_STRING),
+                                'name': openapi.Schema(type=openapi.TYPE_STRING),
+                                'role': openapi.Schema(type=openapi.TYPE_STRING),
+                            }
+                        )
+                    }
+                )
+            ),
+            400: "Brak emaila lub hasła / Niepoprawny JSON",
+            401: "Niepoprawne dane logowania"
+        }
+    )
     def post(self, request):
         try:
             data = json.loads(request.body)
@@ -41,12 +76,11 @@ class LoginView(View):
                 }
             })
 
-            # Set HttpOnly cookies
             response.set_cookie(
                 key='access_token',
                 value=access_token,
                 httponly=True,
-                secure=False,   # True w produkcji (HTTPS)
+                secure=False,
                 samesite='Lax',
                 path='/',
             )
@@ -66,6 +100,10 @@ class LoginView(View):
 
 @method_decorator(csrf_exempt, name="dispatch")
 class LogoutView(View):
+    @swagger_auto_schema(
+        operation_description="Wylogowanie użytkownika",
+        responses={200: "Wylogowano pomyślnie"}
+    )
     def post(self, request):
         response = JsonResponse({"message": "Logged out"})
         response.delete_cookie('access_token', path='/')
@@ -74,6 +112,21 @@ class LogoutView(View):
 
 @method_decorator(csrf_exempt, name="dispatch")
 class CustomTokenRefreshView(TokenRefreshView):
+    @swagger_auto_schema(
+        operation_description="Odświeżanie tokena dostępu",
+        responses={
+            200: openapi.Response(
+                description="Token odświeżony",
+                schema=openapi.Schema(
+                    type=openapi.TYPE_OBJECT,
+                    properties={
+                        'access': openapi.Schema(type=openapi.TYPE_STRING),
+                    }
+                )
+            ),
+            401: "Brak lub niepoprawny token odświeżający"
+        }
+    )
     def post(self, request, *args, **kwargs):
         refresh_token = request.COOKIES.get('refresh_token')
 

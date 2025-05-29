@@ -12,3 +12,4 @@ djangorestframework-simplejwt
 django-allauth    
 dj-rest-auth  
 django-debug-toolbar      
+drf-yasg

@@ -4,13 +4,57 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from .authentication import CookieJWTAuthentication
 from .models import Budget, Category, Payment
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
 
 class BudgetListView(APIView):
     authentication_classes = [CookieJWTAuthentication]
     permission_classes = [IsAuthenticated]
 
+    @swagger_auto_schema(
+        operation_description="Pobierz listę budżetów użytkownika wraz z kategoriami i płatnościami",
+        responses={200: openapi.Response(
+            description="Lista budżetów",
+            schema=openapi.Schema(
+                type=openapi.TYPE_OBJECT,
+                properties={
+                    "budgets": openapi.Schema(
+                        type=openapi.TYPE_ARRAY,
+                        items=openapi.Schema(
+                            type=openapi.TYPE_OBJECT,
+                            properties={
+                                "id": openapi.Schema(type=openapi.TYPE_INTEGER),
+                                "title": openapi.Schema(type=openapi.TYPE_STRING),
+                                "categories": openapi.Schema(
+                                    type=openapi.TYPE_ARRAY,
+                                    items=openapi.Schema(
+                                        type=openapi.TYPE_OBJECT,
+                                        properties={
+                                            "id": openapi.Schema(type=openapi.TYPE_INTEGER),
+                                            "name": openapi.Schema(type=openapi.TYPE_STRING),
+                                            "payments": openapi.Schema(
+                                                type=openapi.TYPE_ARRAY,
+                                                items=openapi.Schema(
+                                                    type=openapi.TYPE_OBJECT,
+                                                    properties={
+                                                        "id": openapi.Schema(type=openapi.TYPE_INTEGER),
+                                                        "payment_title": openapi.Schema(type=openapi.TYPE_STRING),
+                                                        "amount": openapi.Schema(type=openapi.TYPE_STRING),
+                                                        "date": openapi.Schema(type=openapi.TYPE_STRING, format="date"),
+                                                    }
+                                                )
+                                            )
+                                        }
+                                    )
+                                )
+                            }
+                        )
+                    )
+                }
+            )
+        )}
+    )
     def get(self, request):
-
         budgets = Budget.objects.filter(user=request.user).prefetch_related('categories__payments')
 
         data = []
@@ -32,7 +76,42 @@ class BudgetListView(APIView):
 
         return Response({"budgets": data}, status=status.HTTP_200_OK)
 
-
+    @swagger_auto_schema(
+        operation_description="Utwórz nowy budżet z kategoriami i płatnościami",
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            required=['title'],
+            properties={
+                'title': openapi.Schema(type=openapi.TYPE_STRING, description='Tytuł budżetu'),
+                'categories': openapi.Schema(
+                    type=openapi.TYPE_ARRAY,
+                    description="Lista kategorii",
+                    items=openapi.Schema(
+                        type=openapi.TYPE_OBJECT,
+                        properties={
+                            'name': openapi.Schema(type=openapi.TYPE_STRING, description='Nazwa kategorii'),
+                            'payments': openapi.Schema(
+                                type=openapi.TYPE_ARRAY,
+                                description='Lista płatności w kategorii',
+                                items=openapi.Schema(
+                                    type=openapi.TYPE_OBJECT,
+                                    properties={
+                                        'title': openapi.Schema(type=openapi.TYPE_STRING, description='Tytuł płatności'),
+                                        'amount': openapi.Schema(type=openapi.TYPE_STRING, description='Kwota płatności'),
+                                        'date': openapi.Schema(type=openapi.TYPE_STRING, format='date', description='Data płatności'),
+                                    }
+                                )
+                            )
+                        }
+                    )
+                )
+            }
+        ),
+        responses={
+            201: openapi.Response(description="Budżet utworzony pomyślnie"),
+            400: "Błędne dane wejściowe"
+        }
+    )
     def post(self, request):
         data = request.data
         title = data.get("title")
@@ -83,10 +162,49 @@ class BudgetListView(APIView):
             "payments": created_payments,
         }, status=status.HTTP_201_CREATED)
 
+
 class BudgetDetailView(APIView):
     authentication_classes = [CookieJWTAuthentication]
     permission_classes = [IsAuthenticated]
 
+    @swagger_auto_schema(
+        operation_description="Pobierz szczegóły budżetu po ID, wraz z kategoriami i płatnościami",
+        responses={
+            200: openapi.Response(
+                description="Szczegóły budżetu",
+                schema=openapi.Schema(
+                    type=openapi.TYPE_OBJECT,
+                    properties={
+                        "id": openapi.Schema(type=openapi.TYPE_INTEGER),
+                        "title": openapi.Schema(type=openapi.TYPE_STRING),
+                        "categories": openapi.Schema(
+                            type=openapi.TYPE_ARRAY,
+                            items=openapi.Schema(
+                                type=openapi.TYPE_OBJECT,
+                                properties={
+                                    "id": openapi.Schema(type=openapi.TYPE_INTEGER),
+                                    "name": openapi.Schema(type=openapi.TYPE_STRING),
+                                    "payments": openapi.Schema(
+                                        type=openapi.TYPE_ARRAY,
+                                        items=openapi.Schema(
+                                            type=openapi.TYPE_OBJECT,
+                                            properties={
+                                                "id": openapi.Schema(type=openapi.TYPE_INTEGER),
+                                                "payment_title": openapi.Schema(type=openapi.TYPE_STRING),
+                                                "amount": openapi.Schema(type=openapi.TYPE_STRING),
+                                                "date": openapi.Schema(type=openapi.TYPE_STRING, format="date"),
+                                            }
+                                        )
+                                    )
+                                }
+                            )
+                        )
+                    }
+                )
+            ),
+            404: "Budżet nie znaleziony"
+        }
+    )
     def get(self, request, pk):
         try:
             budget = Budget.objects.prefetch_related('categories__payments').get(pk=pk, user=request.user)
