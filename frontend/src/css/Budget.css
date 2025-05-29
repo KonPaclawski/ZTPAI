@@ -5,7 +5,7 @@ body {
 }
 
 .budget-menu_left {
-    width: 25vw;
+    width: 20vw;
     height: auto;
     background-color: #3a58a4;
     display: flex;
@@ -31,9 +31,12 @@ body {
 }
 
 .budget-menu_options {
-    width: 80%;
     display: flex;
+    margin-top:60vh;
+    flex-direction: column;
     justify-content: center;
+    align-items:center;
+    gap:5vh;
     margin-bottom: 2rem;
 }
 

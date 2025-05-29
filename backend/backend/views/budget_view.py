@@ -227,3 +227,20 @@ class BudgetDetailView(APIView):
         }
 
         return Response(data, status=status.HTTP_200_OK)
+    
+    @swagger_auto_schema(
+        operation_description="Usuń budżet na podstawie ID. Operacja jest nieodwracalna i usuwa także powiązane kategorie oraz płatności.",
+        responses={
+            204: openapi.Response(description="Budżet został pomyślnie usunięty"),
+            404: openapi.Response(description="Nie znaleziono budżetu o podanym ID")
+        }
+    )
+    
+    def delete(self, request, pk):
+        try:
+            budget = Budget.objects.get(pk=pk, user=request.user)
+        except Budget.DoesNotExist:
+            return Response({"error": "Budget not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        budget.delete()
+        return Response({"message": "Budget deleted successfully"}, status=status.HTTP_204_NO_CONTENT)
