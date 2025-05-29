@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 import "../css/Budget.css";
+import { handleAuthError } from "../utils/auth";
 
 const Budget = () => {
   const { id } = useParams();
@@ -40,8 +41,7 @@ const Budget = () => {
         setNoteInputs(initialNotes);
       } catch (err) {
         if (err.response?.status === 401) {
-          alert("Unauthorized, please login again.");
-          navigate("/login");
+          await handleAuthError(fetchBudgetAndNotes, navigate);
         } else {
           setError("Failed to load budget details.");
         }

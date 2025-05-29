@@ -4,6 +4,7 @@ import "../css/Dashboard.css";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCreditCard } from '@fortawesome/free-solid-svg-icons';
+import { handleAuthError, logout } from "../utils/auth";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -19,24 +20,10 @@ const Dashboard = () => {
       setError(null);
     } catch (err) {
       if (err.response?.status === 401) {
-        alert("Unauthorized, please login again.");
-        navigate("/login");
+        await handleAuthError(fetchBudgets, navigate);
       } else {
         setError("Failed to load budgets.");
       }
-    }
-  };
-
-  const handleAuthError = async () => {
-    try {
-      await axios.post("http://localhost:8000/api/token/refresh/", {}, {
-        withCredentials: true,
-      });
-      await fetchBudgets();
-    } catch {
-      alert("Session expired, please login again.");
-      localStorage.clear();
-      navigate("/login");
     }
   };
 
@@ -54,14 +41,7 @@ const Dashboard = () => {
         <nav className="sidebar-links">
           <a href="/newBudget">Nowy Budżet</a>
           <a href="/settings">Settings</a>
-          <a
-            onClick={() => {
-              localStorage.clear();
-              navigate("/login");
-            }}
-          >
-            Logout
-          </a>
+          <a onClick={() => logout(navigate)}>Logout</a>
         </nav>
       </aside>
 

@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { handleAuthError } from "../utils/auth";
+
 
 const Settings = () => {
   const userRole = localStorage.getItem("userRole");
@@ -37,8 +39,13 @@ const Settings = () => {
     } else if (error.response?.status === 403) {
       setMessage("⛔ Brak uprawnień do wykonania tej operacji.");
     } else if (error.response?.status === 401) {
-      setMessage("🔒 Sesja wygasła. Zaloguj się ponownie.");
-      navigate("/login");
+      await handleAuthError(
+      () => handleDeleteUser(),
+      () => {
+        setMessage("🔒 Sesja wygasła. Zaloguj się ponownie.");
+        navigate("/login");
+      }
+    );
     } else {
       setMessage("⚠️ Wystąpił błąd podczas usuwania użytkownika.");
     }

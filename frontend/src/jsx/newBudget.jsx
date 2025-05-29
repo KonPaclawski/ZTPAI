@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import styles from "../css/newBudget.module.css";
+import { handleAuthError } from "../utils/auth";
 
 const NewBudget = () => {
     const navigate = useNavigate();
@@ -78,8 +79,13 @@ const NewBudget = () => {
         } catch (error) {
             console.error(error);
             if (error.response?.status === 401) {
-                alert("🔒 Sesja wygasła. Zaloguj się ponownie.");
-                navigate("/login");
+                await handleAuthError(
+                handleSubmit,
+                () => {
+                  alert("🔒 Sesja wygasła. Zaloguj się ponownie.");
+                  navigate("/login");
+                }
+            );         
             } else {
                 setMessage("❌ Błąd: Nie udało się utworzyć budżetu");
             }
