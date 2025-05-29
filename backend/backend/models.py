@@ -55,7 +55,7 @@ class Category(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=255)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    budget = models.ForeignKey(Budget, on_delete=models.CASCADE, related_name="categories")  # Add this line
+    budget = models.ForeignKey(Budget, on_delete=models.CASCADE, related_name="categories") 
 
     def __str__(self):
         return self.name
