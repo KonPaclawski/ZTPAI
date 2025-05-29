@@ -67,7 +67,6 @@ const Dashboard = () => {
           <a href="/newBudget">Nowy Budżet</a>
           <a href="/settings">Settings</a>
           <a
-            href="#logout"
             onClick={() => {
               localStorage.clear();
               navigate("/login");
@@ -80,47 +79,17 @@ const Dashboard = () => {
 
       <main className="main-content">
         <h2>Twoje Budżety</h2>
-        {error && <p className="error">{error}</p>}
-
-        {budgets.length === 0 ? (
-          <p>Brak budżetów do wyświetlenia.</p>
-        ) : (
-          budgets.map((budget) => (
-            <div key={budget.id} className="budget-card">
-              <h3>{budget.title}</h3>
-
-              {budget.categories.length === 0 ? (
-                <p>Brak kategorii</p>
-              ) : (
-                budget.categories.map((category) => (
-                  <div key={category.id} className="category-section">
-                    <h4>{category.name}</h4>
-
-                    {category.payments.length === 0 ? (
-                      <p>Brak płatności</p>
-                    ) : (
-                      <ul>
-                        {category.payments.map((payment) => (
-                          <li key={payment.id}>
-                            {payment.payment_title}: {payment.amount} PLN on {payment.date}
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-                  </div>
-                ))
-              )}
-
-              <button
-                className="budget-button"
-                onClick={() => navigate(`/budget/${budget.id}`)}
-              >
-                Szczegóły budżetu
-              </button>
-            </div>
-          ))
-        )}
+        {budgets.map((budget) => (
+          <button
+            key={budget.id}
+            className="budget-button"
+            onClick={() => navigate(`/budgets/${budget.id}`)}
+          >
+            {budget.title}
+          </button>
+        ))}
       </main>
+
     </div>
   );
 };

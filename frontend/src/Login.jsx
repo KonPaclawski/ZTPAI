@@ -26,6 +26,7 @@ const Login = () => {
     localStorage.setItem("userId", user.id);
     localStorage.setItem("userEmail", user.email);
     localStorage.setItem("userRole", user.role);
+    localStorage.setItem("userName", user.name);
 
     console.log("accessToken after login:", localStorage.getItem("accessToken"));
     console.log("refreshToken after login:", localStorage.getItem("refreshToken"));

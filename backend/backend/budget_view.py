@@ -10,8 +10,6 @@ class BudgetListView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        print("DEBUG USER:", request.user)
-        print("DEBUG AUTH:", request.headers.get("Authorization"))
 
         budgets = Budget.objects.filter(user=request.user).prefetch_related('categories__payments')
 
@@ -85,3 +83,30 @@ class BudgetListView(APIView):
             "categories": created_categories,
             "payments": created_payments,
         }, status=status.HTTP_201_CREATED)
+
+class BudgetDetailView(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, pk):
+        try:
+            budget = Budget.objects.prefetch_related('categories__payments').get(pk=pk, user=request.user)
+        except Budget.DoesNotExist:
+            return Response({"error": "Budget not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        categories_data = []
+        for category in budget.categories.all():
+            payments = list(category.payments.values("id", "payment_title", "amount", "date"))
+            categories_data.append({
+                "id": category.id,
+                "name": category.name,
+                "payments": payments
+            })
+
+        data = {
+            "id": budget.id,
+            "title": budget.title,
+            "categories": categories_data
+        }
+
+        return Response(data, status=status.HTTP_200_OK)

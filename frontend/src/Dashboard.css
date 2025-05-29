@@ -7,7 +7,7 @@ body {
     font-family: Arial, sans-serif;
 }
 
-/* Sidebar styles */
+
 .sidebar {
     width: 20vw;
     min-width: 200px;
@@ -58,16 +58,19 @@ body {
     width: 80%;
 }
 
-/* Ensure last item has margin at bottom */
-.sidebar > *:last-child {
+.sidebar>*:last-child {
     margin-bottom: 5vh;
 }
 
-/* Main content styles */
 .main-content {
     margin-left: 20vw;
-    padding: 40px;
+    width: 80vw;
     color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
 }
 
 .budget-buttons {
@@ -78,19 +81,20 @@ body {
 }
 
 .budget-button {
-    padding: 12px 20px;
-    background-color: #3E5BBF;
-    color: white;
+    width: 25vw;
+    height: 15vh;
+    background-color: #D1D1D1;
+    color: color;
     border: none;
-    border-radius: 6px;
+    border-radius: 20px;
     font-size: 1.1rem;
-    text-align: left;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.5s ease;
+    margin: 0;
 }
 
 .budget-button:hover {
-    background-color: #324ca5;
+    background-color: #4169e4;
 }
 
 .error {
