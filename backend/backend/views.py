@@ -56,3 +56,24 @@ class UserDetailView(APIView):
             return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
 
         return Response({"id": user.id, "name": user.name, "email": user.email}, status=status.HTTP_200_OK)
+    
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
+
+class DeleteUserView(APIView):
+    def delete(self, request, username):
+        if not request.user.is_authenticated or request.user.role != "admin":
+            return Response({"error": "Nie masz uprawnień."}, status=status.HTTP_403_FORBIDDEN)
+
+        try:
+            user_to_delete = User.objects.get(name=username)
+            if user_to_delete.role == "admin":
+                return Response({"error": "Nie można usunąć innego administratora."}, status=status.HTTP_403_FORBIDDEN)
+            user_to_delete.delete()
+            return Response({"message": f"Użytkownik '{username}' został usunięty."}, status=status.HTTP_204_NO_CONTENT)
+        except User.DoesNotExist:
+            return Response({"error": "Użytkownik nie istnieje."}, status=status.HTTP_404_NOT_FOUND)
