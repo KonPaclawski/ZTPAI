@@ -229,17 +229,16 @@ const NewBudget = () => {
                 </button>
 
                 <div className={styles["submit-container"]}>
-                    <a
-                        className={styles["buttonSecondary"]}
-                        href="/dashboard"
-                        style={{ color: "#700002" }}
-                    >
-                        COFNIJ
-                    </a>
+                    <button
+                          type="button"
+                          className={styles["buttonSecondary"]}
+                          onClick={() => navigate("/dashboard")}
+                        >
+                          COFNIJ
+                    </button>
                     <button
                         className={styles["buttonPrimary"]}
                         type="submit"
-                        style={{ color: "#006c1e" }}
                     >
                         STWÓRZ
                     </button>
