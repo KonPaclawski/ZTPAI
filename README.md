@@ -56,11 +56,12 @@ Docker: Konteneryzacja całego środowiska (frontend, backend, baza danych) dla 
 ```
 ## Technologie
 
+```bash
 Frontend (React) - bogaty ekosystem (React Router, Axios)
 Backend (Django) - umozliwia łatwą autoryzację i zarządzanie użytkownikami
 Baza Danych (postgreSQL) - dobrze integruje się z Django i jest szeroko wspierany.
 Docker
-
+```
 ## Testowanie 
 ```bash 
 docker-compose exec backend python manage.py test backend.tests.test_register
