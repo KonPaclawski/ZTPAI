@@ -7,6 +7,7 @@ import Login from "./Login";
 import Dashboard from "./Dashboard";
 import Settings from "./Settings";
 import NewBudget from "./newBudget";
+import Budget from "./Budget";
 
 const rootElement = document.getElementById("root");
 const root = ReactDOM.createRoot(rootElement); 
@@ -21,6 +22,7 @@ root.render(
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/newBudget" element={<NewBudget />} />
         <Route path="/settings" element={<Settings />} />
+        <Route path="/budgets/:id" element={<Budget />} />
       </Routes>
     </Router>
   </React.StrictMode>
