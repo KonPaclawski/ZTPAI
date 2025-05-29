@@ -7,13 +7,13 @@ const App = () => {
 
 
   useEffect(() => {
-    axios.get("http://localhost:8000/api/users/")
+    axios.get("http://localhost:8000/api/v1/users/")
       .then(response => setUsers(response.data.users))
       .catch(error => console.error("Error fetching users:", error));
   }, []);
   
   useEffect(() => {
-    axios.get("http://localhost:8000/api/budgets/")
+    axios.get("http://localhost:8000/api/v1/budgets/")
       .then(response => setBudgets(response.data.budgets))
       .catch(error => console.error("Error fetching budgets:", error));
   }

@@ -1,0 +1,158 @@
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: #4F6CCB;
+  margin: 0;
+  padding: 0;
+}
+
+.main-container {
+  max-width: 700px;
+  margin: 30px auto;
+  background-color: #fff;
+  padding: 24px;
+  border-radius: 10px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+}
+
+.main-container > form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  gap:20px;
+}
+
+input {
+  padding: 8px 10px;
+  font-size: 14px;
+  border: 1px solid ;
+  border-radius: 6px;
+  margin: 1px solid black;
+  box-sizing: border-box;
+}
+.info-container,
+.top-inputs,
+.category-container,
+.payment-container {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.buttonPrimary {
+  background-color: #00C61E;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-size: 14px;
+  cursor: pointer;
+  font-weight: 500;
+  text-transform: uppercase;
+  transition: background-color 0.2s ease;
+  width: 140px;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.buttonPrimary:hover {
+  background-color: #00a61b;
+}
+
+.buttonSecondary {
+  background-color: #700002;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-size: 14px;
+  text-decoration: none;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+  width: 140px;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.buttonSecondary:hover {
+  background-color: #5e0001;
+}
+
+.category-group,
+.payment-group {
+  margin-top: 10px;
+  border-top: 1px solid #eee;
+  padding-top: 10px;
+}
+
+.removeBtn {
+  background: none;
+  border: none;
+  color: #e60000;
+  font-size: 13px;
+  cursor: pointer;
+  margin: 10px 0;
+  padding: 10px;
+  align-self: flex-end;
+}
+
+.removeBtn:hover {
+  text-decoration: underline;
+}
+
+.addCategoryBtn,
+.addPaymentBtn {
+  background-color: #4F6CCB;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 10px;
+  margin: 10px 0;
+  font-size: 13px;
+  cursor: pointer;
+  font-weight: 500;
+  text-transform: uppercase;
+  transition: background-color 0.2s ease;
+}
+
+.addCategoryBtn:hover,
+.addPaymentBtn:hover {
+  background-color: #3a54a3;
+}
+
+.payments-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.submit-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+@media (max-width: 500px) {
+  .submit-container {
+    flex-direction: column;
+    align-items: stretch;   
+  }
+
+  .buttonPrimary,
+  .buttonSecondary {
+    width: 100%;
+  }
+}
