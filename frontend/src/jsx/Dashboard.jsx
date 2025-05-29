@@ -13,7 +13,7 @@ const Dashboard = () => {
 
   const fetchBudgets = async () => {
     try {
-      const response = await axios.get("http://localhost:8000/api/budgets/", {
+      const response = await axios.get("http://localhost:8000/api/v1/budgets/", {
         withCredentials: true, 
       });
       setBudgets(response.data.budgets);
@@ -47,15 +47,19 @@ const Dashboard = () => {
 
       <main className="main-content">
         <h2>Twoje Budżety</h2>
-        {budgets.map((budget) => (
-          <button
-            key={budget.id}
-            className="budget-button"
-            onClick={() => navigate(`/budgets/${budget.id}`)}
-          >
-            {budget.title}
-          </button>
-        ))}
+        {budgets.length === 0 ? (
+          <p>Brak budżetów</p>
+        ) : (
+          budgets.map((budget) => (
+            <button
+              key={budget.id}
+              className="budget-button"
+              onClick={() => navigate(`/budgets/${budget.id}`)}
+            >
+              {budget.title}
+            </button>
+          ))
+        )}
       </main>
     </div>
   );

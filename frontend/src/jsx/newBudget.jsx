@@ -55,7 +55,7 @@ const NewBudget = () => {
 
         try {
             const response = await axios.post(
-                "http://localhost:8000/api/budgets/",
+                "http://localhost:8000/api/v1/budgets/",
                 {
                     title: title,
                     categories: categories.map((cat) => ({

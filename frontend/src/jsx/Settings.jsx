@@ -25,7 +25,7 @@ const Settings = () => {
 
   try {
     await axios.delete(
-      `http://localhost:8000/api/admin/delete-user/${usernameToDelete}/`,
+      `http://localhost:8000/api/v1/admin/delete-user/${usernameToDelete}/`,
       {
         withCredentials: true,
       }

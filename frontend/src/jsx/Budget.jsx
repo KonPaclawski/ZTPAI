@@ -14,7 +14,7 @@ const Budget = () => {
   useEffect(() => {
     const fetchBudgetAndNotes = async () => {
       try {
-        const response = await axios.get(`http://localhost:8000/api/budgets/${id}/`, {
+        const response = await axios.get(`http://localhost:8000/api/v1/budgets/${id}/`, {
           withCredentials: true,
         });
         setBudget(response.data);
@@ -23,7 +23,7 @@ const Budget = () => {
         const notesPromises = response.data.categories.flatMap(category =>
           category.payments.map(payment =>
             axios
-              .get(`http://localhost:8000/api/notes/${payment.id}/`, {
+              .get(`http://localhost:8000/api/v1/notes/${payment.id}/`, {
                 withCredentials: true,
               })
               .then(res => ({ paymentId: payment.id, content: res.data.content }))
@@ -67,13 +67,13 @@ const Budget = () => {
 
       if (existingNote) {
         await axios.put(
-          `http://localhost:8000/api/notes/${paymentId}/`,
+          `http://localhost:8000/api/v1/notes/${paymentId}/`,
           { content },
           { withCredentials: true }
         );
       } else {
         await axios.post(
-          `http://localhost:8000/api/notes/`,
+          `http://localhost:8000/api/v1/notes/`,
           { payment_id: paymentId, content },
           { withCredentials: true }
         );
@@ -107,7 +107,7 @@ const Budget = () => {
   const handleDeleteBudget = async () => {
     if (window.confirm("Czy na pewno chcesz usunąć ten budżet?")) {
       try {
-        await axios.delete(`http://localhost:8000/api/budgets/${id}/`, {
+        await axios.delete(`http://localhost:8000/api/v1/budgets/${id}/`, {
           withCredentials: true,
         });
         alert("Budżet został usunięty.");

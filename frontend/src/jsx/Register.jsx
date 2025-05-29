@@ -13,7 +13,7 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:8000/api/register/", { name, email, password });
+      await axios.post("http://localhost:8000/api/v1/register/", { name, email, password });
 
       alert("Rejestracja zakończone sukcesem!");
     } catch (error) {
