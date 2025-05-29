@@ -2,11 +2,11 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
-from rest_framework_simplejwt.authentication import JWTAuthentication
+from .authentication import CookieJWTAuthentication
 from .models import Budget, Category, Payment
 
 class BudgetListView(APIView):
-    authentication_classes = [JWTAuthentication]
+    authentication_classes = [CookieJWTAuthentication]
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
@@ -41,7 +41,6 @@ class BudgetListView(APIView):
         if not title:
             return Response({"error": "Title is required"}, status=status.HTTP_400_BAD_REQUEST)
 
-        # Create budget linked to user
         budget = Budget.objects.create(title=title, user=request.user)
         created_categories = []
         created_payments = []
@@ -85,7 +84,7 @@ class BudgetListView(APIView):
         }, status=status.HTTP_201_CREATED)
 
 class BudgetDetailView(APIView):
-    authentication_classes = [JWTAuthentication]
+    authentication_classes = [CookieJWTAuthentication]
     permission_classes = [IsAuthenticated]
 
     def get(self, request, pk):

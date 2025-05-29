@@ -150,9 +150,13 @@ REST_FRAMEWORK = {
 SIMPLE_JWT = {
     'USER_ID_FIELD': 'id', 
     'USER_ID_CLAIM': 'user_id',
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
-    'ALGORITHM': 'HS256',
-    'SIGNING_KEY': SECRET_KEY,
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+    'AUTH_COOKIE': 'access_token',              
+    'AUTH_COOKIE_SECURE': False,             
+    'AUTH_COOKIE_HTTP_ONLY': True,              
+    'AUTH_COOKIE_PATH': '/',                    
+    'AUTH_COOKIE_SAMESITE': 'Lax',     
 }
 AUTH_USER_MODEL = 'backend.User'
+CORS_ALLOW_CREDENTIALS = True

@@ -11,23 +11,15 @@ const Budget = () => {
 
   useEffect(() => {
     const fetchBudget = async () => {
-      const accessToken = localStorage.getItem("accessToken");
-      if (!accessToken) {
-        alert("No access token found, please login");
-        navigate("/login");
-        return;
-      }
-
       try {
         const response = await axios.get(`http://localhost:8000/api/budgets/${id}/`, {
-          headers: { Authorization: `Bearer ${accessToken}` },
+          withCredentials: true, 
         });
         setBudget(response.data);
         setError(null);
       } catch (err) {
         if (err.response?.status === 401) {
           alert("Unauthorized, please login again.");
-          localStorage.clear();
           navigate("/login");
         } else {
           setError("Failed to load budget details.");

@@ -52,13 +52,6 @@ const NewBudget = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const accessToken = localStorage.getItem("accessToken");
-        if (!accessToken) {
-            alert("Brak tokenu dostępu, zaloguj się ponownie.");
-            navigate("/login");
-            return;
-        }
-
         try {
             const response = await axios.post(
                 "http://localhost:8000/api/budgets/",
@@ -74,9 +67,9 @@ const NewBudget = () => {
                     })),
                 },
                 {
+                    withCredentials: true,
                     headers: {
                         "Content-Type": "application/json",
-                        Authorization: `Bearer ${accessToken}`,
                     },
                 }
             );
@@ -84,7 +77,12 @@ const NewBudget = () => {
             setMessage("✅ Budżet został utworzony pomyślnie!");
         } catch (error) {
             console.error(error);
-            setMessage("❌ Błąd: Nie udało się utworzyć budżetu");
+            if (error.response?.status === 401) {
+                alert("🔒 Sesja wygasła. Zaloguj się ponownie.");
+                navigate("/login");
+            } else {
+                setMessage("❌ Błąd: Nie udało się utworzyć budżetu");
+            }
         }
     };
 

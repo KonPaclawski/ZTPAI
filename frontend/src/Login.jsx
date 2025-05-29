@@ -11,34 +11,27 @@ const Login = () => {
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
-  try {
-    const response = await axios.post("http://localhost:8000/api/login/", {
-      email,
-      password,
-    });
-    console.log("Login response:", response.data);
+    e.preventDefault();
+    try {
+      const response = await axios.post(
+        "http://localhost:8000/api/login/",
+        { email, password },
+        { withCredentials: true }
+      );
 
-    const { access, refresh, user } = response.data;
+      console.log("Login response:", response.data);
 
-    localStorage.setItem("accessToken", access);
-    localStorage.setItem("refreshToken", refresh);
-    localStorage.setItem("userId", user.id);
-    localStorage.setItem("userEmail", user.email);
-    localStorage.setItem("userRole", user.role);
-    localStorage.setItem("userName", user.name);
+      const { user } = response.data;
 
-    console.log("accessToken after login:", localStorage.getItem("accessToken"));
-    console.log("refreshToken after login:", localStorage.getItem("refreshToken"));
+      localStorage.setItem("userRole", user.role);
 
-    alert("Zalogowano pomyślnie!");
-    navigate("/dashboard");
-  } catch (error) {
-    console.error("Login error:", error.response?.data || error.message);
-    alert(`Login failed! ${error.response?.data?.error || "Unknown error"}`);
-  }
-};
-
+      alert("Zalogowano pomyślnie!");
+      navigate("/dashboard");
+    } catch (error) {
+      console.error("Login error:", error.response?.data || error.message);
+      alert(`Login failed! ${error.response?.data?.error || "Unknown error"}`);
+    }
+  };
 
   return (
     <>
@@ -49,8 +42,18 @@ const Login = () => {
 
       <div className="login-container">
         <form onSubmit={handleSubmit}>
-          <input type="email" placeholder="Email" onChange={(e) => setEmail(e.target.value)} required />
-          <input type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} required />
+          <input
+            type="email"
+            placeholder="Email"
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
           <button type="submit">Zaloguj się</button>
         </form>
         <p><a href="/register">Utwórz Konto</a></p>

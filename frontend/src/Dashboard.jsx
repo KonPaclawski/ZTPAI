@@ -11,22 +11,16 @@ const Dashboard = () => {
   const [error, setError] = useState(null);
 
   const fetchBudgets = async () => {
-    const accessToken = localStorage.getItem("accessToken");
-    if (!accessToken) {
-      alert("No access token found, please login");
-      navigate("/login");
-      return;
-    }
-
     try {
       const response = await axios.get("http://localhost:8000/api/budgets/", {
-        headers: { Authorization: `Bearer ${accessToken}` },
+        withCredentials: true, 
       });
       setBudgets(response.data.budgets);
       setError(null);
     } catch (err) {
       if (err.response?.status === 401) {
-        await handleAuthError();
+        alert("Unauthorized, please login again.");
+        navigate("/login");
       } else {
         setError("Failed to load budgets.");
       }
@@ -34,19 +28,10 @@ const Dashboard = () => {
   };
 
   const handleAuthError = async () => {
-    const refreshToken = localStorage.getItem("refreshToken");
-    if (!refreshToken) {
-      alert("Session expired, please login again.");
-      localStorage.clear();
-      navigate("/login");
-      return;
-    }
-
     try {
-      const refreshResponse = await axios.post("http://localhost:8000/api/token/refresh/", {
-        refresh: refreshToken,
+      await axios.post("http://localhost:8000/api/token/refresh/", {}, {
+        withCredentials: true,
       });
-      localStorage.setItem("accessToken", refreshResponse.data.access);
       await fetchBudgets();
     } catch {
       alert("Session expired, please login again.");
@@ -92,7 +77,6 @@ const Dashboard = () => {
           </button>
         ))}
       </main>
-
     </div>
   );
 };

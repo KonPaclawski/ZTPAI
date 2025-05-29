@@ -10,51 +10,42 @@ const Settings = () => {
   const navigate = useNavigate();
 
   const handleDeleteUser = async () => {
-    if (!usernameToDelete.trim()) {
-      setMessage("⚠️ Wprowadź nazwę użytkownika.");
-      setMessageColor("red");
-      return;
-    }
+  if (!usernameToDelete.trim()) {
+    setMessage("⚠️ Wprowadź nazwę użytkownika.");
+    setMessageColor("red");
+    return;
+  }
 
-    const confirmDelete = window.confirm(
-      `Na pewno chcesz usunąć użytkownika "${usernameToDelete}"?`
-    );
-    if (!confirmDelete) return;
+  const confirmDelete = window.confirm(
+    `Na pewno chcesz usunąć użytkownika "${usernameToDelete}"?`
+  );
+  if (!confirmDelete) return;
 
-    const accessToken = localStorage.getItem("accessToken");
-    if (!accessToken) {
-      setMessage("Brak tokenu dostępu. Zaloguj się ponownie.");
-      setMessageColor("red");
-      return;
-    }
-
-    try {
-      await axios.delete(
-        `http://localhost:8000/api/admin/delete-user/${usernameToDelete}/`,
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
-      setMessage(`✅ Użytkownik "${usernameToDelete}" został usunięty.`);
-      setMessageColor("green");
-      setUsernameToDelete("");
-    } catch (error) {
-      if (error.response?.status === 404) {
-        setMessage("❌ Użytkownik nie został znaleziony.");
-      } else if (error.response?.status === 403) {
-        setMessage("⛔ Brak uprawnień do wykonania tej operacji.");
-      } else if (error.response?.status === 401) {
-        setMessage("🔒 Sesja wygasła. Zaloguj się ponownie.");
-        localStorage.clear();
-        navigate("/login");
-      } else {
-        setMessage("⚠️ Wystąpił błąd podczas usuwania użytkownika.");
+  try {
+    await axios.delete(
+      `http://localhost:8000/api/admin/delete-user/${usernameToDelete}/`,
+      {
+        withCredentials: true,
       }
-      setMessageColor("red");
+    );
+    setMessage(`✅ Użytkownik "${usernameToDelete}" został usunięty.`);
+    setMessageColor("green");
+    setUsernameToDelete("");
+  } catch (error) {
+    if (error.response?.status === 404) {
+      setMessage("❌ Użytkownik nie został znaleziony.");
+    } else if (error.response?.status === 403) {
+      setMessage("⛔ Brak uprawnień do wykonania tej operacji.");
+    } else if (error.response?.status === 401) {
+      setMessage("🔒 Sesja wygasła. Zaloguj się ponownie.");
+      navigate("/login");
+    } else {
+      setMessage("⚠️ Wystąpił błąd podczas usuwania użytkownika.");
     }
-  };
+    setMessageColor("red");
+  }
+};
+
 
   const styles = {
     container: {
