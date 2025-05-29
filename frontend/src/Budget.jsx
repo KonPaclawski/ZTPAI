@@ -41,6 +41,11 @@ const Budget = () => {
   if (error) return <div>{error}</div>;
   if (!budget) return <div>Loading...</div>;
 
+  const totalSpent = budget.categories.reduce((sumCategories, category) => {
+    const sumPayments = category.payments.reduce((sum, payment) => sum + payment.amount, 0);
+    return sumCategories + sumPayments;
+  }, 0);
+
   return (
     <div style={{ display: "flex" }}>
       <aside className="budget-menu_left">
@@ -55,32 +60,35 @@ const Budget = () => {
       <div className="budget-container">
         <div className="budget-amount_container">
           <h1>{budget.title}</h1>
-          <a>Wykorzystanie budżetu: — / —</a>
+          <a>
+            Wykorzystanie budżetu: {totalSpent} zł
+          </a>
         </div>
-
-        {budget.categories.map((category) => (
-          <div key={category.id}>
-            <h3>{category.name}</h3>
-            <div className="budget-data_container">
-              {category.payments.length === 0 ? (
-                <p>No payments</p>
-              ) : (
-                category.payments.map((payment) => (
-                  <div key={payment.id} className="budget-category_container">
-                    <div className="budget-payments_container">
-                      <a>
-                        {payment.payment_title} - {payment.amount} zł
-                      </a>
+        <div className="budget-info_container">
+          {budget.categories.map((category) => (
+            <div key={category.id}>
+              <h3>{category.name}</h3>
+              <div className="budget-data_container">
+                {category.payments.length === 0 ? (
+                  <p>No payments</p>
+                ) : (
+                  category.payments.map((payment) => (
+                    <div key={payment.id} className="budget-category_container">
+                      <div className="budget-payments_container">
+                        <a>
+                          {payment.payment_title} - {payment.amount} zł
+                        </a>
+                      </div>
+                      <div className="budget-date_container">
+                        <a>Kolejna Płatność: {payment.date}</a>
+                      </div>
                     </div>
-                    <div className="budget-date_container">
-                      <a>Kolejna Płatność: {payment.date}</a>
-                    </div>
-                  </div>
-                ))
-              )}
+                  ))
+                )}
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </div>
   );
