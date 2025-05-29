@@ -1,7 +1,7 @@
 from django.urls import reverse
 from rest_framework.test import APITestCase, APIClient
 from rest_framework import status
-from backend.backend.models import User
+from backend.models import User
 from django.contrib.auth.hashers import check_password
 
 class UserAPITestCase(APITestCase):

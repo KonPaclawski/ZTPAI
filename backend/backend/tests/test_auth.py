@@ -1,7 +1,7 @@
 from django.test import TestCase, Client
 from django.urls import reverse
 from django.contrib.auth.hashers import make_password
-from backend.backend.models import User
+from backend.models import User
 import json
 
 class AuthTests(TestCase):

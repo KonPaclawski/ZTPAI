@@ -2,7 +2,7 @@ from django.urls import reverse
 from rest_framework.test import APITestCase, APIClient
 from rest_framework import status
 from django.contrib.auth import get_user_model
-from backend.backend.models import Budget, Category, Payment
+from backend.models import Budget, Category, Payment
 
 User = get_user_model()
 
